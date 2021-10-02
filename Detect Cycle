@@ -1,0 +1,60 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Node
+{
+    int data;
+    struct Node *next;
+};
+
+void push(struct Node **head, int newData)
+{
+    struct Node* newNode = new Node;
+    newNode->data = newData;
+    newNode->next = (*head);
+    (*head) = newNode;
+}
+
+void deleteList(struct Node** head)
+{
+    struct Node *curr = *head;
+    struct Node *next;
+ 
+    while (curr != NULL)
+    {
+        next = curr->next;
+        free(curr);
+        curr = next;
+    }
+   
+    *head = NULL;
+}
+
+bool detectCycle(struct Node *head)
+{
+    struct Node *slow = head, *fast = head;
+    while (slow && fast && fast->next)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+        if(slow == fast)
+            return true;
+    }
+    return false;
+}
+
+
+int main()
+{
+    struct Node *head = NULL;
+    push(&head, 10);
+    push(&head, 30);
+    push(&head, 90);
+    push(&head, 50);
+    head->next->next->next->next = head;
+    if(detectCycle(head))
+        cout<<"\nCycle is present";
+    else    
+        cout<<"\nCycle is not present";
+    return 0;
+}
